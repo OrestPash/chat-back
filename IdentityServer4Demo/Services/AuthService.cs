@@ -20,19 +20,11 @@ namespace IdentityServer4Demo.Services
 
         public async Task<List<UserVM>> GetUsersAsync()
         {
-            return await _userManager.Users.Select(x=> new UserVM { Id = x.Id, Name = x.UserName})?.ToListAsync();
+            return await _userManager.Users.Select(x => new UserVM { Id = x.Id, Name = x.UserName })?.ToListAsync();
         }
 
-        public async Task<string> RegisterUserAsync(SignupForm model)
+        public async Task<SignupResult> RegisterUserAsync(SignupForm model)
         {
-            var res = await _userManager.FindByNameAsync(model.UserName);
-
-            //TODO "User already exist"
-            //if (res != null)
-            //{
-            //     throw new Exception();
-            //}
-
             var newUser = new IdentityUser
             {
                 LockoutEnabled = true,
@@ -44,14 +36,21 @@ namespace IdentityServer4Demo.Services
             {
                 newUser.Email = model.UserName;
             }
-            //TODO "Wrong email"
+
+            var result = await _userManager.CreateAsync(newUser, model.Password);
+
+            var signupResult = new SignupResult { IsSuccess = result.Succeeded };
+
+            if (!result.Succeeded)
+            {
+                signupResult.Errors = result.Errors.Select(x => x.Description).ToList();
+            }
             else
             {
-                //throw new Exception();
+                signupResult.Id = newUser.Id;
             }
 
-            await _userManager.CreateAsync(newUser, model.Password);
-            return newUser.Id;
+            return signupResult;
         }
     }
 }

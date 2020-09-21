@@ -6,7 +6,7 @@ namespace IdentityServer4Demo.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<string> RegisterUserAsync(SignupForm model);
+        Task<SignupResult> RegisterUserAsync(SignupForm model);
         Task<List<UserVM>> GetUsersAsync();
     }
 }

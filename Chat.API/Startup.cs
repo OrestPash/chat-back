@@ -44,7 +44,7 @@ namespace Chat.API
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder => builder
-                .WithOrigins("http://localhost:4300")
+                .WithOrigins("http://localhost:4200", "http://localhost:4300")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());

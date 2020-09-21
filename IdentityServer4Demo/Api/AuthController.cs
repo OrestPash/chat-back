@@ -20,7 +20,7 @@ namespace IdentityServer4Demo.Api
         {
             var result = await _authService.RegisterUserAsync(model);
 
-            return Ok(new { Id = result });
+            return Ok(result);
         }
 
         [HttpGet("users")]
